@@ -1,7 +1,10 @@
 ///<reference types="cypress"/>
 
 beforeEach(() =>{
-    cy.visit('http://zero.webappsecurity.com/')
+    cy.fixture('datossmoketest.json').then(function(datos){
+        this.datossmoketest=datos
+    cy.visit(this.datossmoketest.url)
+   })   
 })
 
 describe('first test - homepage', function(){
@@ -26,8 +29,8 @@ describe('first test - homepage', function(){
 describe('second test - E2E test', function(){
     it('Transfer founds validation', function(){
         cy.get('#signin_button').click()
-        cy.get('#user_login').type('username')
-        cy.get('#user_password').type('password')
+        cy.get('#user_login').type(this.datossmoketest.username)
+        cy.get('#user_password').type(this.datossmoketest.password)
         cy.get('.btn').click()
         cy.get('#transfer_funds_tab > a').click()
         cy.get('#tf_fromAccountId').select(2)
@@ -39,10 +42,6 @@ describe('second test - E2E test', function(){
         cy.get('#btn_submit').click()
         cy.get('.alert').should('contain','You successfully submitted your transaction.')
         cy.get('.board-content').should('be.visible')
-        
     })
-
-
-
 })
 
